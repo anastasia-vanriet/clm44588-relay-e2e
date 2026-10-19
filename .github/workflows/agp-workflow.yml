@@ -74,6 +74,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  broken:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/this-action-does-not-exist-clm44588@v0
+
   # Cheap, Docker-free gate. Determines whether AGP should run for this repo and, when
   # it should, writes the governed effective agp.yml to the workspace (fail-closed).
   gate:
