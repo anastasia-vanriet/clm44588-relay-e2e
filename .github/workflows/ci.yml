@@ -1,0 +1,11 @@
+name: CI
+on:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          if [ "$(cat ci-mode 2>/dev/null)" = "fail" ]; then echo "ci-mode says fail"; exit 1; fi
+          echo ok
